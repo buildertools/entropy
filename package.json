@@ -1,0 +1,18 @@
+{
+  "name": "entropy",
+  "version": "0.0.1",
+  "description": "An entropy and failure injection management API for Docker platforms.",
+  "main": "gulp",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "gulp": "^3.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "gulp test"
+  },
+  "author": "Jeff Nickoloff \"jeff@allingeek.com\"",
+  "license": "ISC"
+}

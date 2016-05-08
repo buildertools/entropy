@@ -1,0 +1,48 @@
+# Uses an empty image and mounts in the only binary.
+# This is helpful in development because it remove the image build process
+# from the redeployment chain. This is Go afterall and we like our builds
+# minimal. Using volumes in this way we don't even need to recreate the
+# container. We can simply restart the existing one.
+entropy:
+  build: .
+  dockerfile: local.df
+  volumes:
+   - ./bin:/src/buildertools/bin
+   - ./pkg:/src/buildertools/pkg
+   - .:/src/buildertools/src/github.com/buildertools/entropy
+  ports:
+   - 8080:80
+  links:
+   - influxdb:influxdb
+
+# Integration tests that run every 30 seconds against entropy
+#local-integ:
+#  build: ./integ
+#  links:
+#   - entropy:entropy
+
+redis:
+  image: redis
+  log_driver: none
+
+influxdb:
+  image: tutum/influxdb
+  expose:
+   - 8083
+   - 8086
+  ports:
+   - 8083:8083
+   - 8086:8086
+  environment:
+    PRE_CREATE_DB: "mydb"
+  log_driver: none
+
+grafana:
+  image: grafana/grafana
+  read_only: true
+  volumes:
+   - ./dashboard.json:/dashboard.json
+  ports:
+   - 3000:3000
+  links:
+   - influxdb:influxdb
