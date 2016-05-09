@@ -55,21 +55,23 @@ func registerInterruptHandler(f func()) {
 func createRoutes() *gin.Engine {
 	router := gin.Default()
 	for _, f := range API {
+		lf := f
+
 		// Wrap with a gin.HandlerFunc
 		wrap := func(c *gin.Context) {
 			ctx := &context{}
-			f.Handler(ctx, c.Writer, c.Request)
+			lf.Handler(ctx, c.Writer, c.Request)
 		}
 
 		switch {
-		case "GET" == f.Method:
-			router.GET(f.Route, wrap)
-		case "POST" == f.Method:
-			router.POST(f.Route, wrap)
-		case "DELETE" == f.Method:
-			router.DELETE(f.Route, wrap)
-		case "PUT" == f.Method:
-			router.PUT(f.Route, wrap)
+		case "GET" == lf.Method:
+			router.GET(lf.Route, wrap)
+		case "POST" == lf.Method:
+			router.POST(lf.Route, wrap)
+		case "DELETE" == lf.Method:
+			router.DELETE(lf.Route, wrap)
+		case "PUT" == lf.Method:
+			router.PUT(lf.Route, wrap)
 		}
 	}
 	return router
