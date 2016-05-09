@@ -10,8 +10,12 @@ clean:
 prepare:
 	docker run -it --rm -v "$(shell pwd)":/work -w /work node:4.1.2 npm install
 
-iterate:
+reiterate:
 	docker-compose build entropy
+	docker-compose up -d --no-deps --force-recreate entropy
+
+iterate:
+	#docker-compose build entropy
 	docker-compose up -d
 
 stop:

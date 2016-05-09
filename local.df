@@ -15,6 +15,7 @@ ENV GOPATH=/src/buildertools PATH=$PATH:/src/buildertools/bin GODEBUG=netdns=cgo
 RUN mkdir -p /src/buildertools/src/github.com/buildertools/entropy && mkdir -p /src/buildertools/bin
 RUN go get github.com/codegangsta/cli && \
     go get gopkg.in/yaml.v2 && \
+    go get github.com/gin-gonic/gin && \
     go get github.com/Sirupsen/logrus
 
 VOLUME ["/src/buildertools/src/github.com/buildertools/entropy", "/src/buildertools/pkg", "/src/buildertools/bin"]

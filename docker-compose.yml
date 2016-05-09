@@ -11,7 +11,7 @@ entropy:
    - ./pkg:/src/buildertools/pkg
    - .:/src/buildertools/src/github.com/buildertools/entropy
   ports:
-   - 8080:80
+   - 8080:2476
   links:
    - influxdb:influxdb
 

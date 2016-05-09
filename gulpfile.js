@@ -30,7 +30,7 @@ gulp.task('build', function() {
 gulp.task('spawn', function() {
   if (server)
     server.kill();
-  server = child.spawn('entropy', ['--debug','version']);
+  server = child.spawn('entropy', ['--debug','manage', 'arg1', 'arg2', 'arg3']);
   server.stderr.on('data', function(data) {
     process.stdout.write(data.toString());
   });
