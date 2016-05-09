@@ -11,7 +11,7 @@ type feature struct {
 var API = map[string]feature{
 	"ping":     {PathTemplate: "/_ping", Method: "GET", Route: "/_ping", Handler: ping},
 	"events":   {PathTemplate: "/events", Method: "GET", Route: "/events", Handler: handlerNotYetImplemented},
-	"info":     {PathTemplate: "/info", Method: "GET", Route: "/info", Handler: handlerNotYetImplemented},
+	"info":     {PathTemplate: "/info", Method: "GET", Route: "/info", Handler: info},
 	"version":  {PathTemplate: "/version", Method: "GET", Route: "/version", Handler: handlerNotYetImplemented},
 	"list":     {PathTemplate: "/injectors/", Method: "GET", Route: "/injectors/", Handler: handlerNotYetImplemented},
 	"injector": {PathTemplate: "/injectors/{{.Cid}}/json", Method: "GET", Route: "/injectors/:name/json", Handler: handlerNotYetImplemented},
