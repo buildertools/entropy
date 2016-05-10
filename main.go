@@ -73,11 +73,6 @@ var (
 			Usage:     "Start the Entropy manager",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "endpoint, e",
-					Usage: "Docker (Swarm) endpoint.",
-					Value: "tcp://localhost:2376",
-				},
-				cli.StringFlag{
 					Name:  "cacert",
 					Usage: "",
 					Value: "",
@@ -100,11 +95,6 @@ var (
 					Name:  "image",
 					Usage: "Gremlin image",
 					Value: "qualimente/gremlins",
-				},
-				cli.StringFlag{
-					Name:  "",
-					Usage: "",
-					Value: "",
 				},
 			},
 			Before: func(c *cli.Context) error {
