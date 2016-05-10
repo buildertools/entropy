@@ -107,8 +107,15 @@ var (
 					Value: "",
 				},
 			},
+			Before: func(*Context) error {
+				args := c.Args()
+				if len(args) == 0 {
+					return errors.New("Required target is missing.")
+				}
+			},
 			Action: func(c *cli.Context) error {
-				m := &manager{}
+				m := &manager{Target: c.Args()[0]}
+				log.Printf("Target has been set to: %s", m.Target)
 				for _, v := range c.GlobalStringSlice("host") {
 					if strings.HasPrefix(v, "tcp://") {
 						m.Tcp = strings.TrimPrefix(v, "tcp://")

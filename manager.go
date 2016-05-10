@@ -7,8 +7,9 @@ import (
 )
 
 type manager struct {
-	Unix string
-	Tcp  string
+	Unix   string
+	Tcp    string
+	Target string
 }
 
 func (m *manager) Start() {
