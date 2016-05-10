@@ -40,7 +40,7 @@ func list(c *context, w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	containers, err := client.ListContainers(false, false, fmt.Sprintf("{\"label\":[\"%s\"]}", AGENT_LABEL))
+	containers, err := client.ListContainers(true, false, fmt.Sprintf("{\"label\":[\"%s\"]}", AGENT_LABEL))
 	if err != nil {
 		panic(err)
 	}

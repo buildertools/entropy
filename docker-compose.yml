@@ -54,7 +54,7 @@ rt2:
 
 rt3:
   image: docker:1.10
-  command: docker run -d --label buildertools.entropy.agent --label buildertools.entropy.frequency=100 --label buildertools.entropy.probability=5 --label buildertools.entropy.faults=reordering,loss alpine sleep 36000
+  command: docker run -d --label buildertools.entropy.agent --label buildertools.entropy.frequency=100 --label buildertools.entropy.probability=5 --label buildertools.entropy.faults=reordering,loss --label buildertools.entropy.target=aaaabbbbcccc --label buildertools.entropy.criteria=container:aaaabbbbcccc alpine sleep 36000
   links:
    - node3:docker
 
