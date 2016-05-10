@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"errors"
+	"errors"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
@@ -107,11 +107,12 @@ var (
 					Value: "",
 				},
 			},
-			Before: func(*Context) error {
+			Before: func(c *cli.Context) error {
 				args := c.Args()
 				if len(args) == 0 {
 					return errors.New("Required target is missing.")
 				}
+				return nil
 			},
 			Action: func(c *cli.Context) error {
 				m := &manager{Target: c.Args()[0]}

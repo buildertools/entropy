@@ -60,7 +60,7 @@ func (m *manager) createRoutes() *gin.Engine {
 
 		// Wrap with a gin.HandlerFunc
 		wrap := func(c *gin.Context) {
-			ctx := &context{}
+			ctx := &context{Target: m.Target}
 			lf.Handler(ctx, c.Writer, c.Request)
 		}
 

@@ -2,12 +2,16 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	log "github.com/Sirupsen/logrus"
+	docker "github.com/samalba/dockerclient"
 	"net/http"
 )
 
 type Handler func(c *context, w http.ResponseWriter, r *http.Request)
-type context struct{}
+type context struct {
+	Target string
+}
 
 func ping(c *context, w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte{'O', 'K'})
@@ -31,22 +35,19 @@ func info(c *context, w http.ResponseWriter, r *http.Request) {
 }
 
 func list(c *context, w http.ResponseWriter, r *http.Request) {
-	// TODO: connect to the Docker endpoint (injected via context)
-	//       use ps and --filter for the entropy agent label
-	//       Foreach result, extract an injector - use append
-	//       FromContainerInfo(r)
+	client, err := docker.NewDockerClient(c.Target, nil)
+	if err != nil {
+		panic(err)
+	}
 
-	l := []injector{
-		{
-			Name:        "hopping_kenedy",
-			Frequency:   "30",
-			Probability: "10",
-			Image:       "qualmente/gremlins",
-			Faults: []string{
-				"pause",
-				"partition",
-			},
-		},
+	containers, err := client.ListContainers(false, false, fmt.Sprintf("{\"label\":[\"%s\"]}", AGENT_LABEL))
+	if err != nil {
+		panic(err)
+	}
+
+	l := []injector{}
+	for _, v := range containers {
+		l = append(l, FromContainer(v))
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")

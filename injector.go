@@ -28,10 +28,10 @@ var faults = []string{
 	"pause",
 }
 
-func FromContainerInfo(i docker.ContainerInfo) injector {
-	r := injector{Name: i.Name, Image: i.Image}
-	r.Frequency = i.Config.Labels[FREQUENCY_LABEL]
-	r.Probability = i.Config.Labels[PROBABILITY_LABEL]
-	r.Faults = strings.Split(i.Config.Labels[FAULTS_LABEL], ",")
+func FromContainer(i docker.Container) injector {
+	r := injector{Name: i.Id, Image: i.Image}
+	r.Frequency = i.Labels[FREQUENCY_LABEL]
+	r.Probability = i.Labels[PROBABILITY_LABEL]
+	r.Faults = strings.Split(i.Labels[FAULTS_LABEL], ",")
 	return r
 }
