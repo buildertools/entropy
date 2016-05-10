@@ -14,6 +14,13 @@ entropy:
    - 8080:2476
   links:
    - influxdb:influxdb
+   - swarm:swarm
+
+swarm:
+  image: swarm
+  ports:
+   - 3376
+  command: ["manage", "-H", "tcp://0.0.0.0:3376", "nodes://node1:2376,node2:2376"]
 
 # Integration tests that run every 30 seconds against entropy
 #local-integ:
