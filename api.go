@@ -16,7 +16,7 @@ var API = map[string]feature{
 	"list":     {PathTemplate: "/injectors/", Method: "GET", Route: "/injectors/", Handler: list},
 	"injector": {PathTemplate: "/injectors/{{.Cid}}/json", Method: "GET", Route: "/injectors/:name/json", Handler: handlerNotYetImplemented},
 	"logs":     {PathTemplate: "/injectors/{{.Cid}}/logs", Method: "GET", Route: "/injectors/:name/logs", Handler: handlerNotYetImplemented},
-	"create":   {PathTemplate: "/injectors/", Method: "POST", Route: "/injectors/", Handler: handlerNotYetImplemented},
+	"create":   {PathTemplate: "/injectors/", Method: "POST", Route: "/injectors/", Handler: create},
 	"kill":     {PathTemplate: "/injectors/{{.Cid}}/kill", Method: "POST", Route: "/injectors/:name/kill", Handler: handlerNotYetImplemented},
 	"pause":    {PathTemplate: "/injectors/{{.Cid}}/pause", Method: "POST", Route: "/injectors/:name/pause", Handler: handlerNotYetImplemented},
 	"unpause":  {PathTemplate: "/injectors/{{.Cid}}/unpause", Method: "POST", Route: "/injectors/:name/unpause", Handler: handlerNotYetImplemented},

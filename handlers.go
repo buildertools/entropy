@@ -56,6 +56,15 @@ func list(c *context, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func create(c *context, w http.ResponseWriter, r *http.Request) {
+
+	i := injector{Name: "4gfewg43"}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	fmt.Fprintf(w, "{%q:%q}", "Name", i.Name)
+}
+
 func handlerNotYetImplemented(c *context, w http.ResponseWriter, r *http.Request) {
 	httpError(w, "Not implemented yet.", http.StatusNotImplemented)
 }
