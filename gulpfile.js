@@ -3,7 +3,7 @@ var child = require('child_process');
 var server = null;
 var it = null;
 
-gulp.task('default', ['build', 'watch', 'spawn']);
+gulp.task('default', ['build', 'printHelp', 'watch', 'spawn']);
 
 gulp.task('watch', function() {
   gulp.watch('./**/*.go', ['build','printHelp','spawn']);
