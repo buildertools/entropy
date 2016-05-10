@@ -22,6 +22,7 @@ type injector struct {
 	Probability string
 	Image       string
 	Faults      []string
+	Status      string
 }
 
 var faults = []string{
@@ -39,5 +40,6 @@ func FromContainer(i docker.Container) injector {
 	r.Frequency = i.Labels[FREQUENCY_LABEL]
 	r.Probability = i.Labels[PROBABILITY_LABEL]
 	r.Faults = strings.Split(i.Labels[FAULTS_LABEL], ",")
+	r.Status = i.Status
 	return r
 }
