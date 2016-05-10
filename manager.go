@@ -10,6 +10,7 @@ type manager struct {
 	Unix   string
 	Tcp    string
 	Target string
+	Image  string
 }
 
 func (m *manager) Start() {
@@ -60,7 +61,7 @@ func (m *manager) createRoutes() *gin.Engine {
 
 		// Wrap with a gin.HandlerFunc
 		wrap := func(c *gin.Context) {
-			ctx := &context{Target: m.Target}
+			ctx := &context{Target: m.Target, Image: m.Image, Gin: c}
 			lf.Handler(ctx, c.Writer, c.Request)
 		}
 

@@ -35,7 +35,7 @@ gulp.task('printHelp', function() {
 gulp.task('spawn', function() {
   if (server)
     server.kill();
-  server = child.spawn('entropy', ['--debug','manage', 'tcp://swarm:3376']);
+  server = child.spawn('entropy', ['--debug','manage', "--image", "alpine",'tcp://swarm:3376']);
   server.stderr.on('data', function(data) {
     process.stdout.write(data.toString());
   });
