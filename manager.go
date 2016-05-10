@@ -22,7 +22,7 @@ func (m *manager) Start() {
 	// Start the UNIX server if configured
 	if m.Unix != "" {
 		go func() {
-			router := createRoutes()
+			router := m.createRoutes()
 			router.RunUnix(m.Unix)
 			c <- true
 		}()
@@ -31,7 +31,7 @@ func (m *manager) Start() {
 	// Start the TCP server if configured
 	if m.Tcp != "" {
 		go func() {
-			router := createRoutes()
+			router := m.createRoutes()
 			router.Run(m.Tcp)
 			c <- true
 		}()
@@ -52,7 +52,7 @@ func registerInterruptHandler(f func()) {
 	}()
 }
 
-func createRoutes() *gin.Engine {
+func (m *manager) createRoutes() *gin.Engine {
 	router := gin.Default()
 	for _, f := range API {
 		lf := f

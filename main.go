@@ -65,6 +65,7 @@ var (
 			Usage:  "Entropy endpoint host.",
 		},
 	}
+	// entropy run -f 30s -p .10 --fault recv_drop --target label=service=myserv
 	commands = []cli.Command{
 		{
 			Name:      "manage",
@@ -109,7 +110,6 @@ var (
 			Action: func(c *cli.Context) error {
 				m := &manager{}
 				for _, v := range c.GlobalStringSlice("host") {
-					log.Printf("Examining host value: %s", v)
 					if strings.HasPrefix(v, "tcp://") {
 						m.Tcp = strings.TrimPrefix(v, "tcp://")
 					}
@@ -117,7 +117,6 @@ var (
 						m.Unix = strings.TrimPrefix(v, "unix://")
 					}
 				}
-				log.Printf("Starting server on: %s", m.Unix)
 				m.Start()
 				log.Println("Done")
 				return nil

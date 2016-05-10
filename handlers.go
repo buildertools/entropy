@@ -13,6 +13,10 @@ func ping(c *context, w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte{'O', 'K'})
 }
 
+func version(c *context, w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(VERSION))
+}
+
 func info(c *context, w http.ResponseWriter, r *http.Request) {
 	i := struct {
 		Version string
@@ -22,6 +26,31 @@ func info(c *context, w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err := json.NewEncoder(w).Encode(i); err != nil {
+		panic(err)
+	}
+}
+
+func list(c *context, w http.ResponseWriter, r *http.Request) {
+	// TODO: connect to the Docker endpoint (injected via context)
+	//       use ps and --filter for the entropy agent label
+	//       Foreach result, extract an injector - use append
+	//       FromContainerInfo(r)
+
+	l := []injector{
+		{
+			Name:        "hopping_kenedy",
+			Frequency:   "30",
+			Probability: "10",
+			Image:       "qualmente/gremlins",
+			Faults: []string{
+				"pause",
+				"partition",
+			},
+		},
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	if err := json.NewEncoder(w).Encode(l); err != nil {
 		panic(err)
 	}
 }
