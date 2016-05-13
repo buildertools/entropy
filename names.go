@@ -10,6 +10,7 @@ var nouns = []string{
 	"magneto",
 	"durden",
 	"monkey",
+	"megatron",
 	"ultron"}
 
 var adjectives = []string{
