@@ -16,6 +16,7 @@ const (
 
 type injector struct {
 	Name        string
+	CID         string
 	TargetCID   string
 	Criteria    string
 	Frequency   string
@@ -34,7 +35,7 @@ var faults = []string{
 }
 
 func InjectorFromContainer(i docker.Container) injector {
-	r := injector{Name: i.Id, Image: i.Image}
+	r := injector{Name: strings.Join(i.Names, ", "), CID: i.Id, Image: i.Image}
 	r.TargetCID = i.Labels[TARGET_LABEL]
 	r.Criteria = i.Labels[CRITERIA_LABEL]
 	r.Frequency = i.Labels[FREQUENCY_LABEL]
