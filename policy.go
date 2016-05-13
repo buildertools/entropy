@@ -12,6 +12,7 @@ type policy struct {
 	Probability string
 	Image       string
 	Faults      string
+	Injectors   int
 }
 
 func PolicyFromInjector(i injector) policy {
@@ -38,28 +39,35 @@ func PoliciesFromContainers(cs []docker.Container) []policy {
 		p := PolicyFromInjector(i)
 
 		if _, ok := policies[p.Criteria]; !ok {
-			policies[p.Criteria] = imageMap{ p.Image: faultMap{p.Faults: frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}}}
-			r = append(r, p)
-		}
-
-		if _, ok := policies[p.Criteria][p.Image]; !ok {
+			p.Injectors = 1
+			policies[p.Criteria] = imageMap{p.Image: faultMap{p.Faults: frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}}}
+		} else if _, ok := policies[p.Criteria][p.Image]; !ok {
+			p.Injectors = 1
 			policies[p.Criteria][p.Image] = faultMap{p.Faults: frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}}
-			r = append(r, p)
-		}
-
-		if _, ok := policies[p.Criteria][p.Image][p.Faults]; !ok {
+		} else if _, ok := policies[p.Criteria][p.Image][p.Faults]; !ok {
+			p.Injectors = 1
 			policies[p.Criteria][p.Image][p.Faults] = frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}
-			r = append(r, p)
-		}
-
-		if _, ok := policies[p.Criteria][p.Image][p.Faults][p.Frequency]; !ok {
+		} else if _, ok := policies[p.Criteria][p.Image][p.Faults][p.Frequency]; !ok {
+			p.Injectors = 1
 			policies[p.Criteria][p.Image][p.Faults][p.Frequency] = probabilityMap{p.Probability: p}
-			r = append(r, p)
-		}
-
-		if _, ok := policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability]; !ok {
+		} else if _, ok := policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability]; !ok {
+			p.Injectors = 1
 			policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability] = p
-			r = append(r, p)
+		} else {
+			p.Injectors = 1 + policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability].Injectors
+			policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability] = p
+		}
+	}
+
+	for c, _ := range policies {
+		for i, _ := range policies[c] {
+			for f, _ := range policies[c][i] {
+				for fr, _ := range policies[c][i][f] {
+					for p, _ := range policies[c][i][f][fr] {
+						r = append(r, policies[c][i][f][fr][p])
+					}
+				}
+			}
 		}
 	}
 
