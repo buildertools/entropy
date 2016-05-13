@@ -105,7 +105,7 @@ var (
 				return nil
 			},
 			Action: func(c *cli.Context) error {
-				m := &manager{Target: c.Args()[0], Image: c.String("image")}
+				m := &manager{Target: c.Args()[0], Image: c.String("image"), Events: new(EventContext)}
 				log.Printf("Target has been set to: %s", m.Target)
 				for _, v := range c.GlobalStringSlice("host") {
 					if strings.HasPrefix(v, "tcp://") {
@@ -115,6 +115,7 @@ var (
 						m.Unix = strings.TrimPrefix(v, "unix://")
 					}
 				}
+
 				m.Start()
 				log.Println("Done")
 				return nil

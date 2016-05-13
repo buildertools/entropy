@@ -1,6 +1,7 @@
 package main
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 	"os"
 	"os/signal"
@@ -11,6 +12,7 @@ type manager struct {
 	Tcp    string
 	Target string
 	Image  string
+	Events *EventContext
 }
 
 func (m *manager) Start() {
@@ -20,6 +22,8 @@ func (m *manager) Start() {
 	registerInterruptHandler(func() {
 		c <- true
 	})
+
+	startEventLogger(m.Events)
 
 	// Start the UNIX server if configured
 	if m.Unix != "" {
@@ -42,6 +46,16 @@ func (m *manager) Start() {
 	<-c
 	// TODO: Do cleanup
 
+}
+
+func startEventLogger(ec *EventContext) {
+	o := make(chan event)
+	ec.registerEventObserver(o)
+	go func(c chan event) {
+		for {
+			log.Info(<-o)
+		}
+	}(o)
 }
 
 func registerInterruptHandler(f func()) {
