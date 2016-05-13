@@ -48,9 +48,28 @@ func list(c *context, w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	p := PoliciesFromContainers(containers)
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	if err := json.NewEncoder(w).Encode(p); err != nil {
+		panic(err)
+	}
+}
+
+func lsi(c *context, w http.ResponseWriter, r *http.Request) {
+	client, err := docker.NewDockerClient(c.Target, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	containers, err := client.ListContainers(true, false, fmt.Sprintf("{\"label\":[\"%s\"]}", AGENT_LABEL))
+	if err != nil {
+		panic(err)
+	}
+
 	l := []injector{}
 	for _, v := range containers {
-		l = append(l, FromContainer(v))
+		l = append(l, InjectorFromContainer(v))
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")

@@ -33,7 +33,7 @@ var faults = []string{
 	"pause",
 }
 
-func FromContainer(i docker.Container) injector {
+func InjectorFromContainer(i docker.Container) injector {
 	r := injector{Name: i.Id, Image: i.Image}
 	r.TargetCID = i.Labels[TARGET_LABEL]
 	r.Criteria = i.Labels[CRITERIA_LABEL]
