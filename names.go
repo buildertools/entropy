@@ -10,8 +10,7 @@ var nouns = []string{
 	"magneto",
 	"durden",
 	"monkey",
-	"ultron",
-}
+	"ultron"}
 
 var adjectives = []string{
 	"emboldened",
@@ -19,7 +18,10 @@ var adjectives = []string{
 	"bloodthirsty",
 	"mischievious",
 	"ambivolent",
-}
+	"wildeyed",
+	"shorn",
+	"unpleasant",
+	"brutish"}
 
 func GenerateName() string {
 	return fmt.Sprintf("%s_%s", adjectives[rand.Intn(len(adjectives))], nouns[rand.Intn(len(nouns))])
