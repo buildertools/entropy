@@ -90,6 +90,14 @@ func create(c *context, w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	var name string
+	for i := 0; i < 100; i++ {
+		name = GenerateName()
+		if _, err = client.InspectContainer(name); err != nil {
+			break
+		}
+	}
+
 	containerConfig := &docker.ContainerConfig{
 		Image:       c.Image,
 		Cmd:         []string{"sleep", "40"},
@@ -103,7 +111,7 @@ func create(c *context, w http.ResponseWriter, r *http.Request) {
 			TARGET_LABEL:      "",
 			CRITERIA_LABEL:    payload.Criteria},
 	}
-	containerId, err := client.CreateContainer(containerConfig, GenerateName(), nil)
+	containerId, err := client.CreateContainer(containerConfig, name, nil)
 	if err != nil {
 		httpError(w, err.Error(), http.StatusInternalServerError)
 		return
