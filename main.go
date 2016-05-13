@@ -127,8 +127,13 @@ var (
 		},
 		{
 			Name:   "ls",
+			Usage:  "List failure policies",
+			Action: requestPolicyList,
+		},
+		{
+			Name:   "lsi",
 			Usage:  "List failure injectors",
-			Action: commandNotYetImplemented,
+			Action: requestInjectorList,
 		},
 		{
 			Name:   "run",
