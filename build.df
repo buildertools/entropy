@@ -10,10 +10,7 @@ RUN go get github.com/codegangsta/cli && \
     go get github.com/gin-gonic/gin && \
     go get github.com/Sirupsen/logrus
 
-ENV GODEBUG=netdns=cgo GOOS=linux GOARCH=amd64
-RUN go build -o bin/entropy-linux -v github.com/buildertools/entropy
-
-ENV GODEBUG=netdns=cgo GOOS=darwin GOARCH=amd64
-RUN go build -o bin/entropy-darwin -v github.com/buildertools/entropy
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/entropy-linux64 -v github.com/buildertools/entropy
+RUN CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o bin/entropy-darwin64 -v github.com/buildertools/entropy
 
 CMD echo Entropy build container
