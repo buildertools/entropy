@@ -94,7 +94,7 @@ var (
 				cli.StringFlag{
 					Name:  "image",
 					Usage: "Gremlin image",
-					Value: "qualimente/gremlins",
+					Value: "allingeek/gremlins",
 				},
 			},
 			Before: func(c *cli.Context) error {
