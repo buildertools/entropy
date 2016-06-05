@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	docker "github.com/samalba/dockerclient"
 	"strings"
 )
@@ -11,22 +12,35 @@ type policy struct {
 	Frequency   string
 	Probability string
 	Image       string
-	Faults      string
+	Failures    string
 	Injectors   int
 }
 
 func PolicyFromInjector(i injector) policy {
 	return policy{
+		Name:        i.Policy,
 		Criteria:    i.Criteria,
 		Frequency:   i.Frequency,
 		Probability: i.Probability,
 		Image:       i.Image,
-		Faults:      strings.Join(i.Faults, ",")}
+		Failures:    strings.Join(i.Failures, ",")}
+}
+
+func GetInjectorsForPolicy(client *docker.DockerClient, name string) ([]injector, error) {
+	is := []injector{}
+	cs, err := client.ListContainers(true, false, fmt.Sprintf(`{"label":["%s=%s"]}`, AGENT_LABEL, name))
+	if err != nil {
+		return is, err
+	}
+	for _, c := range cs {
+		is = append(is, InjectorFromContainer(c))
+	}
+	return is, nil
 }
 
 type criteriaMap map[string]imageMap
-type imageMap map[string]faultMap
-type faultMap map[string]frequencyMap
+type imageMap map[string]failureMap
+type failureMap map[string]frequencyMap
 type frequencyMap map[string]probabilityMap
 type probabilityMap map[string]policy
 
@@ -40,22 +54,22 @@ func PoliciesFromContainers(cs []docker.Container) []policy {
 
 		if _, ok := policies[p.Criteria]; !ok {
 			p.Injectors = 1
-			policies[p.Criteria] = imageMap{p.Image: faultMap{p.Faults: frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}}}
+			policies[p.Criteria] = imageMap{p.Image: failureMap{p.Failures: frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}}}
 		} else if _, ok := policies[p.Criteria][p.Image]; !ok {
 			p.Injectors = 1
-			policies[p.Criteria][p.Image] = faultMap{p.Faults: frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}}
-		} else if _, ok := policies[p.Criteria][p.Image][p.Faults]; !ok {
+			policies[p.Criteria][p.Image] = failureMap{p.Failures: frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}}
+		} else if _, ok := policies[p.Criteria][p.Image][p.Failures]; !ok {
 			p.Injectors = 1
-			policies[p.Criteria][p.Image][p.Faults] = frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}
-		} else if _, ok := policies[p.Criteria][p.Image][p.Faults][p.Frequency]; !ok {
+			policies[p.Criteria][p.Image][p.Failures] = frequencyMap{p.Frequency: probabilityMap{p.Probability: p}}
+		} else if _, ok := policies[p.Criteria][p.Image][p.Failures][p.Frequency]; !ok {
 			p.Injectors = 1
-			policies[p.Criteria][p.Image][p.Faults][p.Frequency] = probabilityMap{p.Probability: p}
-		} else if _, ok := policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability]; !ok {
+			policies[p.Criteria][p.Image][p.Failures][p.Frequency] = probabilityMap{p.Probability: p}
+		} else if _, ok := policies[p.Criteria][p.Image][p.Failures][p.Frequency][p.Probability]; !ok {
 			p.Injectors = 1
-			policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability] = p
+			policies[p.Criteria][p.Image][p.Failures][p.Frequency][p.Probability] = p
 		} else {
-			p.Injectors = 1 + policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability].Injectors
-			policies[p.Criteria][p.Image][p.Faults][p.Frequency][p.Probability] = p
+			p.Injectors = 1 + policies[p.Criteria][p.Image][p.Failures][p.Frequency][p.Probability].Injectors
+			policies[p.Criteria][p.Image][p.Failures][p.Frequency][p.Probability] = p
 		}
 	}
 

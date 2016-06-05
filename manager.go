@@ -1,18 +1,18 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/gin"
 	"os"
 	"os/signal"
 )
 
 type manager struct {
-	Unix   string
-	Tcp    string
-	Target string
-	Image  string
-	Events *EventContext
+	Unix          string
+	Tcp           string
+	Target        string
+	Image         string
+	DockerEvents  *DockerEventContext
+	EntropyEvents *EntropyEventContext
 }
 
 func (m *manager) Start() {
@@ -23,7 +23,10 @@ func (m *manager) Start() {
 		c <- true
 	})
 
-	startEventLogger(m.Events)
+	startDockerEventLogger(m.DockerEvents)
+	startEntropyEventLogger(m.EntropyEvents)
+	m.DockerEvents.start(m.Target)
+	startPolicyEnforcer(m.DockerEvents, m.EntropyEvents, m.Target)
 
 	// Start the UNIX server if configured
 	if m.Unix != "" {
@@ -45,17 +48,6 @@ func (m *manager) Start() {
 	// Block until one of the servers stop or the manager is interrupted
 	<-c
 	// TODO: Do cleanup
-
-}
-
-func startEventLogger(ec *EventContext) {
-	o := make(chan event)
-	ec.registerEventObserver(o)
-	go func(c chan event) {
-		for {
-			log.Info(<-o)
-		}
-	}(o)
 }
 
 func registerInterruptHandler(f func()) {

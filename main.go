@@ -65,7 +65,7 @@ var (
 			Usage:  "Entropy endpoint host.",
 		},
 	}
-	// entropy run -f 30s -p .10 --fault recv_drop --target label=service=myserv
+	// entropy run -f 30s -p .10 --failure recv_drop --target label=service=myserv
 	commands = []cli.Command{
 		{
 			Name:      "manage",
@@ -105,7 +105,12 @@ var (
 				return nil
 			},
 			Action: func(c *cli.Context) error {
-				m := &manager{Target: c.Args()[0], Image: c.String("image"), Events: new(EventContext)}
+				m := &manager{
+					Target:        c.Args()[0],
+					Image:         c.String("image"),
+					DockerEvents:  new(DockerEventContext),
+					EntropyEvents: new(EntropyEventContext)}
+
 				log.Printf("Target has been set to: %s", m.Target)
 				for _, v := range c.GlobalStringSlice("host") {
 					if strings.HasPrefix(v, "tcp://") {
@@ -122,33 +127,69 @@ var (
 			},
 		},
 		{
-			Name:   "create",
-			Usage:  "Create a failure injector",
-			Action: commandNotYetImplemented,
+			Name:  "create",
+			Usage: "Create a failure policy",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "name",
+					Usage: "Policy name.",
+					Value: "",
+				},
+				cli.StringFlag{
+					Name:  "criteria, c",
+					Usage: "Container selection criteria.",
+					Value: "",
+				},
+				cli.StringFlag{
+					Name:  "frequency, f",
+					Usage: "Failure frequency.",
+					Value: "30s",
+				},
+				cli.StringFlag{
+					Name:  "probability, p",
+					Usage: "Probability of a failure occuring at the next interval.",
+					Value: ".1",
+				},
+				cli.StringFlag{
+					Name:  "image, i",
+					Usage: "The failure injection image to use.",
+					Value: "alpine",
+				},
+				cli.StringFlag{
+					Name:  "failure, e",
+					Usage: "The name of the failure (supported by the provided image).",
+				},
+			},
+			Action: ClientCreatePolicy,
+		},
+		{
+			Name:   "rm",
+			Usage:  "Remove failure policy",
+			Action: DeletePolicy,
 		},
 		{
 			Name:   "ls",
 			Usage:  "List failure policies",
-			Action: requestPolicyList,
+			Action: RequestPolicyList,
 		},
 		{
 			Name:   "lsi",
 			Usage:  "List failure injectors",
-			Action: requestInjectorList,
+			Action: RequestInjectorList,
 		},
 		{
 			Name:   "run",
-			Usage:  "Create and start failure injector",
+			Usage:  "Create and start failure policy",
 			Action: commandNotYetImplemented,
 		},
 		{
 			Name:   "start",
-			Usage:  "Start a failure injector",
+			Usage:  "Start a failure policy",
 			Action: commandNotYetImplemented,
 		},
 		{
 			Name:   "stop",
-			Usage:  "Stop a failure injector",
+			Usage:  "Stop a failure policy",
 			Action: commandNotYetImplemented,
 		},
 		{

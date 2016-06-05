@@ -21,7 +21,7 @@ var API = map[string]feature{
 	"start":  {PathTemplate: "/policy/{{.Cid}}/start", Method: "POST", Route: "/policy/:name/start", Handler: handlerNotYetImplemented},
 	"stop":   {PathTemplate: "/policy/{{.Cid}}/stop", Method: "POST", Route: "/policy/:name/stop", Handler: handlerNotYetImplemented},
 	"update": {PathTemplate: "/policy/{{.Cid}}/update", Method: "POST", Route: "/policy/:name/update", Handler: handlerNotYetImplemented},
-	"delete": {PathTemplate: "/policy/{{.Cid}}", Method: "DELETE", Route: "/policy/:name", Handler: handlerNotYetImplemented},
+	"delete": {PathTemplate: "/policy/{{.Cid}}", Method: "DELETE", Route: "/policy/:name", Handler: remove},
 
 	"lsi":      {PathTemplate: "/injector/", Method: "GET", Route: "/injector/", Handler: lsi},
 	"injector": {PathTemplate: "/injector/{{.Cid}}/json", Method: "GET", Route: "/injector/:name/json", Handler: handlerNotYetImplemented},
