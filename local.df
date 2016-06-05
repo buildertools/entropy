@@ -1,7 +1,7 @@
 #
 # This Dockerfile is used for local development and is intended for use with
 # a compose environment which weaves in the source via volume at
-# /src/buildertools/src/github.com/buildertools/entropy.
+# /go/src/github.com/buildertools/entropy.
 # This image uses gulpjs to watch those source files, build them on changes,
 # run tests, gofmt, etc, and finally relaunch the service if successful.
 #
@@ -11,15 +11,15 @@ FROM golang:alpine
 RUN apk --update add --no-cache git nodejs
 RUN npm install --global gulp
 
-ENV GOPATH=/src/buildertools PATH=$PATH:/src/buildertools/bin GODEBUG=netdns=cgo
-RUN mkdir -p /src/buildertools/src/github.com/buildertools/entropy && mkdir -p /src/buildertools/bin
+ENV GOPATH=/go/ PATH=$PATH:/go/bin GODEBUG=netdns=cgo
+RUN mkdir -p /go/src/github.com/buildertools/entropy && mkdir -p /go/bin
 RUN go get github.com/codegangsta/cli && \
     go get gopkg.in/yaml.v2 && \
     go get github.com/samalba/dockerclient && \
     go get github.com/gin-gonic/gin && \
     go get github.com/Sirupsen/logrus
 
-VOLUME ["/src/buildertools/src/github.com/buildertools/entropy", "/src/buildertools/pkg", "/src/buildertools/bin"]
-WORKDIR /src/buildertools/src/github.com/buildertools/entropy
+VOLUME ["/go/src/github.com/buildertools/entropy", "/go/pkg", "/go/bin"]
+WORKDIR /go/src/github.com/buildertools/entropy
 
 CMD ["gulp"]

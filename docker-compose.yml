@@ -9,16 +9,17 @@ entropy:
   volumes:
    - ./bin:/src/buildertools/bin
    - ./pkg:/src/buildertools/pkg
-   - .:/src/buildertools/src/github.com/buildertools/entropy
+   - .:/go/src/github.com/buildertools/entropy
   ports:
-   - 8080:2476
+   - 2476:2476
   links:
    - swarm:swarm
    - node1:node1
 
+# Build a small docker fleet with a few dummy containers running (dind)
 swarm:
   image: swarm
-  ports:
+  expose:
    - 3376
   links:
    - node1:node1
@@ -26,8 +27,6 @@ swarm:
    - node3:node3
   command: ["manage", "-H", "tcp://0.0.0.0:3376", "nodes://node1:2375,node2:2375,node3:2375"]
   
-
-# Build a small docker fleet with a few dummy containers running (dind)
 node1:
   image: docker:1.10-dind
   privileged: true
@@ -40,23 +39,21 @@ node3:
   image: docker:1.10-dind
   privileged: true
 
-rt1:
+ds1:
   image: docker:1.10
-  command: docker run -d --label buildertools.entropy.agent --label buildertools.entropy.frequency=100 --label buildertools.entropy.probability=5 --label buildertools.entropy.faults=latency,pause alpine sleep 36000
+  command: docker -H tcp://docker:3376 run -d --label service=PingAWS alpine ping aws.amazon.com
   links:
-   - node1:docker
-
-rt2:
+   - swarm:docker
+ds2:
   image: docker:1.10
-  command: docker run -d --label buildertools.entropy.agent --label buildertools.entropy.frequency=100 --label buildertools.entropy.probability=5 --label buildertools.entropy.faults=partition alpine sleep 36000
+  command: docker -H tcp://docker:3376 run -d --label service=PingAWS alpine ping aws.amazon.com
   links:
-   - node2:docker
-
-rt3:
+   - swarm:docker
+ds3:
   image: docker:1.10
-  command: docker run -d --label buildertools.entropy.agent --label buildertools.entropy.frequency=100 --label buildertools.entropy.probability=5 --label buildertools.entropy.faults=reordering,loss --label buildertools.entropy.target=aaaabbbbcccc --label buildertools.entropy.criteria=container:aaaabbbbcccc alpine sleep 36000
+  command: docker -H tcp://docker:3376 run -d --label service=PingDigitalOcean alpine ping digitalocean.com
   links:
-   - node3:docker
+   - swarm:docker
 
 # Integration tests that run every 30 seconds against entropy
 #local-integ:
@@ -64,28 +61,28 @@ rt3:
 #  links:
 #   - entropy:entropy
 
-#redis:
-#  image: redis
-#  log_driver: none
+redis:
+  image: redis
+  log_driver: none
 
-#influxdb:
-#  image: tutum/influxdb
-#  expose:
-#   - 8083
-#   - 8086
-#  ports:
-#   - 8083:8083
-#   - 8086:8086
-#  environment:
-#    PRE_CREATE_DB: "mydb"
-#  log_driver: none
+influxdb:
+  image: tutum/influxdb
+  expose:
+   - 8083
+   - 8086
+  ports:
+   - 8083:8083
+   - 8086:8086
+  environment:
+    PRE_CREATE_DB: "mydb"
+  log_driver: none
 
-#grafana:
-#  image: grafana/grafana
-#  read_only: true
-#  volumes:
-#   - ./dashboard.json:/dashboard.json
-#  ports:
-#   - 3000:3000
-#  links:
-#   - influxdb:influxdb
+grafana:
+  image: grafana/grafana
+  read_only: true
+  volumes:
+   - ./dashboard.json:/dashboard.json
+  ports:
+   - 3000:3000
+  links:
+   - influxdb:influxdb

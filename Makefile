@@ -15,8 +15,12 @@ reiterate:
 	docker-compose up -d --no-deps --force-recreate entropy
 
 iterate:
-	#docker-compose build entropy
+	docker-compose kill
+	docker-compose rm
 	docker-compose up -d
+
+client:
+	docker-compose up -d --no-deps --force-recreate client
 
 stop:
 	docker-compose stop
@@ -32,9 +36,9 @@ stop:
 # performing more complex copy operations.
 build:
 	docker build -t buildertools/entropy:dev -f build.df .
-	docker run --rm -v $(PWD)/bin:/xfer buildertools/entropy:dev cp /go/bin/entropy /xfer/entropy-exported
+	docker run --rm -v $(PWD)/bin:/xfer buildertools/entropy:dev /bin/sh -c 'cp /go/bin/entropy* /xfer/'
 
 release: build
 	docker build -t buildertools/entropy:latest -f release.df .
-	docker tag buildertools/entropy:latest buildertools/entropy:alpha
+	docker tag buildertools/entropy:latest buildertools/entropy:poc
 

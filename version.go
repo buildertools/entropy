@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	VERSION = "0.1a"
+	VERSION = "0.1poc"
 )
 
 func LogVersion() {

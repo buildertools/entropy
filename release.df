@@ -1,0 +1,3 @@
+FROM alpine
+COPY ./bin/entropy-linux64 /bin/
+ENTRYPOINT ["/bin/entropy-linux64"]
