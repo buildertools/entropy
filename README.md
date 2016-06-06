@@ -29,7 +29,7 @@ The project is currently unlicenced. For the time being, Jeff Nickoloff and All 
 
 ## Demo
 
-Checkout [buildertools/entropy-demo] for a demo guide.
+Checkout [buildertools/entropy-demo](https://github.com/buildertools/entropy-demo) for a demo guide.
 
 ## Contributing
 
