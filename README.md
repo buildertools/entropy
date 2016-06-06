@@ -1,6 +1,6 @@
 # Entropy 
 
-Entropy is a failure injector orchestration microservice for Docker platforms. 
+Entropy is a failure orchestration microservice for Docker platforms. 
 
 Entropy allows a user to define failure injection policies for containers or services running at a target Docker API endpoint. A failure injection policy describes a failure type, frequency/duration, probability, and container selector. Each policy is applied to all current and future containers matching the selector. Policies are manifest by the creation, scheduling, and lifecycle management of sidekick containers called injectors.
 
