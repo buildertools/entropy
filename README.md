@@ -1,10 +1,27 @@
 # Entropy 
 
-Entropy is a failure injectior orchestration service for Docker platforms. 
+Entropy is a failure injector orchestration microservice for Docker platforms. 
+
+Entropy allows a user to define failure injection policies for containers or services running at a target Docker API endpoint. A failure injection policy describes a failure type, frequency/duration, probability, and container selector. Each policy is applied to all current and future containers matching the selector. Policies are manifest by the creation, scheduling, and lifecycle management of sidekick containers called injectors.
+
+### Failures
+
+Entropy failures are pluggable, but by default there are four network failures available:
+
+* Latency
+* Network Partition
+* Packet Reordering
+* Packet Loss
+
+### Selectors
+
+Policies are applied to all current and future containers at the target endpoint that match the provided selector. Currently selectors are limitied to a single label specification (as in Docker container labels). These may take the form: K, or K=V.
+
+This is sufficient to create broad, cross-cutting, or specific failure injection policies for systems with healthy taxonomies.
 
 ## State of the Project
 
-The project is currently PoC quality with no tests and a crude software design. Most existing code will be replaced before a proper beta.
+The project is currently PoC quality with no tests and a crude software design. Most existing code will be replaced before a proper beta. Documentation is currently very light as so much will change before the next release. If you'd like to see how to use it, checkout the demo.
 
 ## Licencing
 
