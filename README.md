@@ -1,5 +1,19 @@
 # Entropy 
 
+Entropy is a failure injectior orchestration service for Docker platforms. 
+
+## State of the Project
+
+The project is currently PoC quality with no tests and a crude software design. Most existing code will be replaced before a proper beta.
+
+## Licencing
+
+The project is currently unlicenced. For the time being, Jeff Nickoloff and All in Geek Consulting Services, LLC retain all copyright to this material. This will change in the next few releases.
+
+## Demo
+
+Checkout [buildertools/entropy-demo] for a demo guide.
+
 ## Contributing
 
 The service source is Go, and the scaffolding is a mix of Docker tooling, Go, JavaScript, and Makefile. The whole environment is designed to be approachable and hackable for those familiar with Docker.
