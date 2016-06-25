@@ -36,7 +36,7 @@ The simplest output mechanism is reading STDOUT. The simplest way I can think to
 
 The first line of STDOUT should contain this line. If the image fails to do so Entropy will assume that the injector has started successfully. However, the system will be unable to provide the user any further insight.
 
-This header block should contain a JSON payload adhering to the JSON spec defined here.
+This header block should contain a JSON payload adhering to the [JSON spec defined here](header.json).
 
 Among other things that payload contains a success code, validation error messages, log format definition and backplane communication line prefix, and a frequency that Entropy should use to check for messages.
 
