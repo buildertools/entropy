@@ -1,0 +1,32 @@
+{ 
+  "$schema": "http://json-schema.org/schema#",
+  "id": "https://raw.githubusercontent.com/buildertools/entropy/master/gremlin/header.json",
+  "title" : "Entropy injector response header.",
+  "description" : "For Entropy feedback from an injector.",
+  "type": "object",
+  "properties": {
+    "started": { "type":"boolean" },
+    "available_failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "validation_errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": { "type": "string" },
+          "message": { "type": "string" }
+        },
+        "required": ["field","message"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": ["started"]
+}

@@ -34,7 +34,7 @@ The simplest output mechanism is reading STDOUT. The simplest way I can think to
 
     == Entropy Header Open ==
 
-The first line of STDOUT should contain this line. If the image fails to do so Entropy will assume that the injector has started successfully. However, the system will be unable to provide the user any further insigt.
+The first line of STDOUT should contain this line. If the image fails to do so Entropy will assume that the injector has started successfully. However, the system will be unable to provide the user any further insight.
 
 This header block should contain a JSON payload adhering to the JSON spec defined here.
 
