@@ -1,3 +1,7 @@
+## PoC Branch
+
+This is a frozen branch used in the proof of concept. No enhancements will be made on this branch. It remains for demonstration purposes only. Please do not use this code in critical environments.
+
 # Entropy 
 
 Entropy is a failure orchestration microservice for Docker platforms. 
