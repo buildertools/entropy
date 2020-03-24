@@ -25,7 +25,7 @@ The project is currently PoC quality with no tests and a crude software design. 
 
 ## Licencing
 
-The project is currently unlicenced. For the time being, Jeff Nickoloff and All in Geek Consulting Services, LLC retain all copyright to this material. This will change in the next few releases.
+Apache 2
 
 ## Demo
 
